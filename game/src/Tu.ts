@@ -1,7 +1,7 @@
 class Tu extends Circle{
 
-    constructor(x,y,r){
-        super(x,y,r);
+    constructor(x,y,r,color,full){
+        super(x,y,r,color,full);
     }
 
     /** 消失*/
@@ -16,7 +16,5 @@ class Tu extends Circle{
         this.spriteCircle.visible = true;
         this.spriteCircle.x = x;
         this.spriteCircle.y = y;
-        this.x = x;
-        this.y = y;
     }
 }

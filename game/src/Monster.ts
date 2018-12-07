@@ -1,6 +1,6 @@
 class Monster extends Circle{
 
-    constructor(x,y,r){
-        super(x,y,r);
+    constructor(x,y,r,color,full){
+        super(x,y,r,color,full);
     }
 }

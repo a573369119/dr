@@ -13,8 +13,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Monster = /** @class */ (function (_super) {
     __extends(Monster, _super);
-    function Monster(x, y, r) {
-        return _super.call(this, x, y, r) || this;
+    function Monster(x, y, r, color, full) {
+        return _super.call(this, x, y, r, color, full) || this;
     }
     return Monster;
 }(Circle));

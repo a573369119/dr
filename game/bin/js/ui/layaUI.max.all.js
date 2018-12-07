@@ -39,7 +39,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.testUI.uiView);
         };
-        testUI.uiView = { "type": "View", "props": { "width": 750, "height": 1334 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 750, "skin": "comp/blank.png", "height": 1334 } }] };
+        testUI.uiView = { "type": "View", "props": { "width": 750, "height": 1334 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 750, "skin": "comp/blank.png", "height": 1334 } }, { "type": "Sprite", "props": { "y": 0, "x": 0, "width": 749, "var": "gameWord", "pivotX": 0, "height": 1341 } }] };
         return testUI;
     }(View));
     ui.testUI = testUI;

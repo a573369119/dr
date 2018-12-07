@@ -12,14 +12,14 @@ var GameWorld = /** @class */ (function () {
         var water;
         this.arr_Water = new Array();
         for (var i = 0; i < this.waterCount; i++) {
-            water = new Water(100, 100, 20);
+            water = new Water(100, 100, 20, '#00f', '#00f');
             this.arr_Water.push(water);
         }
         /**土 */
         this.arr_Tu = Array();
         var tu;
         for (var i = 0; i < this.tuCount; i++) {
-            tu = new Tu(0, 300, 10);
+            tu = new Tu(0, 300, 10, '#88f', '#88f');
             this.arr_Tu.push(tu);
         }
         this.tuList();
@@ -37,15 +37,15 @@ var GameWorld = /** @class */ (function () {
         for (var i = 0; i < this.arr_Water.length; i++) {
             for (var t = 0; t < this.arr_Tu.length; t++) {
                 if (this.arr_Water[i].judgeColider(this.arr_Tu[t])) {
-                    this.mediatorColider_water(this.arr_Water[i]);
+                    this.mediatorColider_water(this.arr_Water[i], this.arr_Tu[t]);
                     break;
                 }
             }
         }
     };
     /** */
-    GameWorld.prototype.mediatorColider_water = function (water) {
-        water.setSpeedY(-2);
+    GameWorld.prototype.mediatorColider_water = function (water, Tu) {
+        water.forceOher(Tu);
     };
     return GameWorld;
 }());

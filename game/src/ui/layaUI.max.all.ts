@@ -18,8 +18,9 @@ module ui {
 
 module ui {
     export class testUI extends View {
+		public gameWord:Laya.Sprite;
 
-        public static  uiView:any ={"type":"View","props":{"width":750,"height":1334},"child":[{"type":"Image","props":{"y":0,"x":0,"width":750,"skin":"comp/blank.png","height":1334}}]};
+        public static  uiView:any ={"type":"View","props":{"width":750,"height":1334},"child":[{"type":"Image","props":{"y":0,"x":0,"width":750,"skin":"comp/blank.png","height":1334}},{"type":"Sprite","props":{"y":0,"x":0,"width":749,"var":"gameWord","pivotX":0,"height":1341}}]};
         constructor(){ super()}
         createChildren():void {
         

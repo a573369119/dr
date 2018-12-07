@@ -13,8 +13,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Tu = /** @class */ (function (_super) {
     __extends(Tu, _super);
-    function Tu(x, y, r) {
-        return _super.call(this, x, y, r) || this;
+    function Tu(x, y, r, color, full) {
+        return _super.call(this, x, y, r, color, full) || this;
     }
     /** 消失*/
     Tu.prototype.destroyCircle = function () {
@@ -25,8 +25,6 @@ var Tu = /** @class */ (function (_super) {
         this.spriteCircle.visible = true;
         this.spriteCircle.x = x;
         this.spriteCircle.y = y;
-        this.x = x;
-        this.y = y;
     };
     return Tu;
 }(Circle));

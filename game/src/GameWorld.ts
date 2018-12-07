@@ -20,7 +20,7 @@ class GameWorld{
         this.arr_Water = new Array<Water>();
         for(let i=0; i<this.waterCount ;i++)
         {
-            water = new Water(100,100,20);
+            water = new Water(100,100,20,'#00f','#00f');
             this.arr_Water.push(water);
         }
         /**土 */
@@ -28,7 +28,7 @@ class GameWorld{
         let tu : Tu;
         for(let i=0; i<this.tuCount; i++)
         {
-            tu = new Tu(0,300,10);
+            tu = new Tu(0,300,10,'#88f','#88f');
             this.arr_Tu.push(tu);
         }
         this.tuList();
@@ -54,7 +54,7 @@ class GameWorld{
             {
                 if(this.arr_Water[i].judgeColider(this.arr_Tu[t]))
                 {
-                    this.mediatorColider_water(this.arr_Water[i]);
+                    this.mediatorColider_water(this.arr_Water[i],this.arr_Tu[t]);
                     break;
                 }
             }
@@ -62,8 +62,8 @@ class GameWorld{
     }
 
     /** */
-    private mediatorColider_water(water:Water) : void
+    private mediatorColider_water(water:Water,Tu : Tu) : void
     {
-        water.setSpeedY(-2);
+        water.forceOher(Tu);
     }
 }
