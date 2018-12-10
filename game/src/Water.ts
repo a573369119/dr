@@ -62,7 +62,7 @@ class Water extends Circle{
         this.spd = 0.002;
 
         this.v_X = 10;
-        this.v_Y = 50;
+        this.v_Y = 100;
         this.a_X = 0;
         this.a_Y = 0;
 
@@ -98,7 +98,7 @@ class Water extends Circle{
     private add(addString : string ,num: number) : void
     {
         switch(addString)
-        {
+        {    
             case "v_X" :
                 this.v_X += num; 
                 break;
@@ -208,7 +208,7 @@ class Water extends Circle{
 
 
      /**移除碰撞 */
-     public removeColider(tu:Tu) : void
+     public removeColider(tu:any) : void
      {
          if(this.dic_A.get(tu))
          {

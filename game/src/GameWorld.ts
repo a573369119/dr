@@ -4,12 +4,21 @@ class GameWorld{
     /**Tu2 */
     private arr_Tu_2 : Array<Tu>; 
 
+    /**mouse */
+    private mouseTest : MouseTest ; 
+    /**红球 */
+    private arr_redC : Array<RedC> ;
+
+    private arr_greenC : Array<GreenC>; 
+    /**通过栈  1=墙壁  2=false  3=true*/
+    private arr_CanGo : Array<boolean>;
+
     /**Water */
     private arr_Water : Array<Water>; 
     /**穿山甲 */
     private monster : Monster;
     /**水滴数 */
-    private waterCount : number = 2;
+    private waterCount : number = 120;
     /**土数量 */
     private tuCount : number = 50;
 
@@ -26,18 +35,157 @@ class GameWorld{
     {
         /**初始化数组 */
         this.arr_PosTu = new Array<any>();
+        this.arr_redC = new Array<RedC>();
+        this.arr_greenC = new Array<GreenC>();
+        this.arr_CanGo = new Array<boolean>();
         /**创建UI */
         this.gameUI = new ui.gameUI();
         Laya.stage.addChild(this.gameUI);
-        /**启动世界关系 */
-        Laya.timer.loop(16,this,this.relationShipRun);
+        /**创建鼠标 */
+        this.createMouse();
         /**创建水滴 */
         this.createWater();
         /**创建地图 */
         this.createMap();
+        /**创建红绿 */
+        this.createGR();
         //土排版
         this.tuList();
+        /**启动世界关系 */
+        Laya.timer.loop(16,this,this.relationShipRun);
+        /**绑定鼠标事件 */
+        Laya.stage.on(Laya.Event.MOUSE_MOVE,this,this.mouseT);
+        /** */
+        Laya.stage.on(Laya.Event.MOUSE_UP,this,this.mouseUp);
+        
     }
+    /**private */
+    private mouseUp() : void
+    {
+        this.arr_CanGo = [];
+        this.mouseTest.mouseIsDown = false;
+        this.mouseTest.mousePos = 0;
+    }
+    /**鼠标检测 */
+    private mouseT() : void
+    {
+        /**调用鼠标检测 */
+        if (this.mouseTest.mouseIsDown) 
+        {
+            let mX = Laya.stage.mouseX;
+            let mY = Laya.stage.mouseY;
+            //墙
+            for(let i=0;i<this.arr_PosTu.length;i++)
+            {
+                    if(Tool.ins.countDic_2(this.arr_PosTu[i].x,this.arr_PosTu[i].y,30,mX,mY,this.mouseTest.r)< 30)
+                    {
+                        let isBreak = false;
+                        for(let g=0; g<this.arr_CanGo.length ; g++)
+                        {
+                            if(this.arr_CanGo[g] === null)
+                            {
+                                isBreak = true;
+                                break;
+                            }
+                            else
+                                isBreak = false;
+                        }
+                        if(isBreak == true) break;
+                        this.arr_CanGo.push(null);
+                        // console.log(this.arr_CanGo);   
+                        break;
+                    }
+            }
+            //绿球
+            for(let i=0;i<this.arr_greenC.length;i++)
+            {
+                if(Tool.ins.countDic_2(this.arr_greenC[i].spriteCircle.x,this.arr_greenC[i].spriteCircle.y,this.arr_greenC[i].r,mX,mY,this.mouseTest.r)< this.arr_greenC[i].r)
+                {
+                        let isBreak = false;
+                        for(let g=0; g<this.arr_CanGo.length ; g++)
+                        {
+                            if(this.arr_CanGo[g] === true)
+                            {
+                                isBreak = true;
+                                break;
+                            }
+                            else
+                                isBreak = false;
+                        }
+                        if(isBreak == true) break;
+                        this.arr_CanGo.push(true);
+                        // console.log(this.arr_CanGo);
+                        break;
+                    }
+                }
+            //红球
+            for(let i=0;i<this.arr_redC.length;i++)
+            {
+                if(Tool.ins.countDic_2(this.arr_redC[i].spriteCircle.x,this.arr_redC[i].spriteCircle.y,this.arr_redC[i].r,mX,mY,this.mouseTest.r)< this.arr_redC[i].r)
+                {
+                        let isBreak = false;
+                        for(let g=0; g<this.arr_CanGo.length ; g++)
+                        {
+                            if(this.arr_CanGo[g] === false)
+                            {
+                                isBreak = true;
+                                break;
+                            }
+                            else
+                                isBreak = false;
+                        }
+                        if(isBreak == true) break;
+                        this.arr_CanGo.push(false);
+                        // console.log(this.arr_CanGo);
+                        break;
+                }
+            }
+            
+
+            //生成区域
+            if(this.arr_CanGo[0] == false && this.arr_CanGo[1] == true && this.arr_CanGo.length <3)
+            {
+                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 25) 
+                {
+
+                    this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
+                    this.mouseTest.mousePos = 0;
+                    this.mouseTest.mousePos_remX = mX;
+                    this.mouseTest.mousePos_remY = mY;
+                    // console.log(Laya.stage.mouseX+","+Laya.stage.mouseX);
+                }
+            }
+        }
+    }
+
+    /**创建红绿 */
+    private createGR() : void
+    {
+        let c;
+        /**红 */
+        for(let i=0; i < 6; i++)
+        {
+            c = new RedC(515+i*20,285,10);
+            this.gameUI.sprite_go.addChild(c.spriteCircle);
+            this.arr_redC.push(c);
+        }
+        /**绿*/
+        for(let i=0; i < 6;i++)
+        {
+            c = new GreenC(515+i*20,300,15);
+            this.gameUI.sprite_go.addChild(c.spriteCircle);
+            this.arr_greenC.push(c);
+        }
+    }
+
+    /**创建鼠标对象 */
+    private createMouse() : void
+    {
+        this.mouseTest = new MouseTest(100,200,35,"#fff","#fff");
+        this.gameUI.sprite_go.addChild(this.mouseTest.spriteCircle);                  
+        
+    }
+
 
     /**土排版*/
     private tuList() : void
@@ -45,55 +193,9 @@ class GameWorld{
 
     }
 
-    /**世界关系互联 */
-    private relationShipRun() : void
-    {
-        //动态获取墙壁
-
-        this.arr_Water.forEach(water => {//抽取 水
-            this.getTu(water);
-            let isbreak = false;
-            this.arr_Tu_1.forEach(tu =>{//抽取 土
-                if(tu.spriteCircle.visible == true)
-                {
-                    if(Tool.ins.countDic(tu,water) ==1 || Tool.ins.countDic(tu,water) ==2){
-                        //处理碰撞效果
-                        if(Tool.ins.countDic(tu,water) ==2.5)
-                        {
-                            
-                        }
-                        else
-                        {
-                            this.coliderTu(water,tu);
-                        }
-                    }
-                    else
-                    {
-                        water.removeColider(tu);
-                        for(let p=0;p<this.arr_PosTu.length; p++)
-                        {
-                            if(Math.sqrt(Math.pow(this.arr_PosTu[p].x - water.spriteCircle.x,2) + Math.pow(this.arr_PosTu[p].y - water.spriteCircle.y,2)) < 60)
-                            {
-                                isbreak = true;
-                                break;
-                            }
-                        }
-                        if(!isbreak)
-                        {
-                            tu.destroyCircle();
-                            Laya.Pool.recover("tu",tu);
-                            console.log("离开的是" + tu.index);
-                            tu.index = -1;
-
-                        }
-                    }
-                }
-            });
-        });
-    }
-
+ 
     /**处理水碰撞地面 */
-    private coliderTu(water:Water,tu:Tu) : void
+    private coliderTu(water:Water,tu:any) : void
     {
         water.setColider(tu);
     }
@@ -112,6 +214,7 @@ class GameWorld{
         for(let i=0; i<this.waterCount ; i++)
         {
             water = new Water(510 + i*0.1,210+i*0.1,10,"#00f","#00f");
+            this.gameUI.sprite_go.addChild(water.spriteCircle);      
             this.arr_Water.push(water);
         }   
     }
@@ -136,6 +239,7 @@ class GameWorld{
             tu = new Tu(650+i*10,310,30,"#880","#880");
             tu.destroyCircle();
             Laya.Pool.recover("tu",tu);
+            this.gameUI.sprite_go.addChild(tu.spriteCircle);                  
             this.arr_Tu_1.push(tu);
         }
 
@@ -197,7 +301,7 @@ class GameWorld{
             //   this.arr_Tu_2.push(tu);
               object.x = 133;
               object.y = 1172 - i*10;
-              this.arr_PosTu.push(object);
+              this.arr_PosTu.push(object);         
          }
          //______________最左竖边
          for(let i=0; i<100;i++)
@@ -298,7 +402,7 @@ class GameWorld{
         for(let i=0;i<this.arr_PosTu.length; i++)
         {
             let isbreak = false;
-            if(Math.sqrt(Math.pow(this.arr_PosTu[i].x - water.spriteCircle.x,2) + Math.pow(this.arr_PosTu[i].y - water.spriteCircle.y,2)) < 60)
+            if(Math.sqrt(Math.pow(this.arr_PosTu[i].x - water.spriteCircle.x,2) + Math.pow(this.arr_PosTu[i].y - water.spriteCircle.y,2)) < 50)
             {
                 for(let t=0; t<this.arr_Tu_1.length; t++)
                 {
@@ -311,35 +415,98 @@ class GameWorld{
                 }
                 if(!isbreak)
                 {
-                    console.log("没有" + i );
                     tu = Laya.Pool.getItem("tu");
                     if(tu)
                     {//对象次有土
                         tu.showCircle(this.arr_PosTu[i].x,this.arr_PosTu[i].y);
                         tu.index = i;
+                        // console.log("对象池" + i );
                     }
                     else
                     {
                         tu = new Tu(this.arr_PosTu[i].x,this.arr_PosTu[i].y,30,"#880","#880");
+                        this.gameUI.sprite_go.addChild(tu.spriteCircle);                  
                         this.arr_Tu_1.push(tu);
                         tu.index = i; 
                     }
                 }
-                // if(tu)
-                // {
-                //     tu.showCircle(this.arr_PosTu[i].x,this.arr_PosTu[i].y);
-                //     // console.log("对象池" + i);
-                // }
-                // else
-                // {   
-                    
-                //      tu = new Tu(this.arr_PosTu[i].x,this.arr_PosTu[i].y,30,"#880","#880");
-                //      this.arr_Tu_1.push(tu);    
-                //     //  console.log("新创建" + i);
-                // }
-
             }
             
         }
     }
+//---------------------------------------------------------------------------------------------------------------------
+   /**世界关系互联 */
+    private relationShipRun() : void
+    {
+        //动态获取墙壁
+
+        this.arr_Water.forEach(water => {//抽取 水
+            this.getTu(water);
+            //土碰撞
+            this.arr_Tu_1.forEach(tu =>{//抽取 土
+                if(tu.spriteCircle.visible == true)
+                {
+                    if(Tool.ins.countDic(tu,water) ==1 || Tool.ins.countDic(tu,water) ==2){
+                        //处理碰撞效果
+                        if(Tool.ins.countDic(tu,water) ==2.5)
+                        {
+                            
+                        }
+                        else
+                        {
+                            this.coliderTu(water,tu);
+                        }
+                    }
+                    else
+                    {
+                        water.removeColider(tu);
+                        let dic;
+                        let r;
+                        let isbreak = false;
+                        for(let w=0;w<this.arr_Water.length; w++)
+                        {
+                             isbreak = false;
+                             dic = Math.sqrt(Math.pow(tu.spriteCircle.x - this.arr_Water[w].spriteCircle.x,2) + Math.pow(tu.spriteCircle.y - this.arr_Water[w].spriteCircle.y,2));
+                             r = (this.arr_Water[w].r + tu.r +5);
+                             if(dic < r)
+                             {
+                                 isbreak = true;
+                                 break;
+                             }
+                        }
+                        if(!isbreak)
+                        {
+                            tu.index = -1;
+                            tu.destroyCircle();
+                            Laya.Pool.recover("tu",tu);
+                        }
+                    }
+                }
+            });
+            //绿球碰撞
+            this.arr_greenC.forEach( gC => {
+                if(gC.spriteCircle.visible == true)
+                {
+                    if(Tool.ins.countDic(gC,water) ==1 || Tool.ins.countDic(gC,water) ==2){
+                        //处理碰撞效果
+                        if(Tool.ins.countDic(gC,water) ==2.5)
+                        {
+                            
+                        }
+                        else
+                        {
+                            this.coliderTu(water,gC);
+                        }
+                    }
+                    else
+                    {
+                        water.removeColider(gC);
+                    }
+                }
+            });
+            ///
+
+        });
+    }
+
 }

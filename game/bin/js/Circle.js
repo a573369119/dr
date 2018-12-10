@@ -7,7 +7,7 @@ var Circle = /** @class */ (function () {
     }
     Circle.prototype.drawSelf = function (x, y, r, color, Full) {
         this.spriteCircle = new Laya.Sprite();
-        Laya.stage.addChild(this.spriteCircle);
+        //Laya.stage.addChild(this.spriteCircle);
         this.spriteCircle.pivot(r / 2, r / 2); //焦点在中心
         this.spriteCircle.x = x;
         this.spriteCircle.y = y;

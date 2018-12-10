@@ -6,7 +6,7 @@ class Tool{
     public static ins : Tool = new Tool;
 
     /**碰撞检测 - 计算距离    1=碰撞  2=相切  3=相离*/
-    public countDic(tu:Tu,water:Water) : number
+    public countDic(tu:any,water:Water) : number
     {
         let dic = Math.sqrt(Math.pow(tu.spriteCircle.x - water.spriteCircle.x,2) + Math.pow(tu.spriteCircle.y - water.spriteCircle.y,2));
         if(dic == (tu.r + water.r))
@@ -29,5 +29,11 @@ class Tool{
         {
             return 3;
         }
+    }    
+    
+    /**碰撞检测 - 计算距离    1=碰撞  2=相切  3=相离*/
+    public countDic_2(x1,y1,r1,x2,y2,r2) : number
+    {
+        return Math.sqrt(Math.pow(x1 - x2,2) + Math.pow(y1 - y2,2));
     }
 }

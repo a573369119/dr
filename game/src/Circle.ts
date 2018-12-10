@@ -16,14 +16,14 @@ class Circle{
      {
          
          this.spriteCircle = new Laya.Sprite();
-         Laya.stage.addChild(this.spriteCircle);
+         //Laya.stage.addChild(this.spriteCircle);
          this.spriteCircle.pivot(r/2,r/2);//焦点在中心
          this.spriteCircle.x = x;
          this.spriteCircle.y = y;
          this.spriteCircle.graphics.drawCircle(0,0,this.r,Full,color,2);
          this.init();
      }
-     
+
      protected init() : void
      {
 
