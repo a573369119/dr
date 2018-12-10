@@ -1,4 +1,6 @@
 class Tu extends Circle{
+    /**index */
+    public index : number;
 
     constructor(x,y,r,color,full){
         super(x,y,r,color,full);

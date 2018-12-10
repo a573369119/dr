@@ -9,7 +9,7 @@ class GameMain{
     {
         Laya.init(750,1334);
         Laya.stage.scaleMode = "exactfix";
-        Laya.stage.screenMode = "vertical";
+        //Laya.stage.screenMode = "vertical";
         Laya.stage.alignV = "middle";
         Laya.stage.alignH = "center";
         //性能检测
