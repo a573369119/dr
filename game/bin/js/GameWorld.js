@@ -10,9 +10,7 @@ var GameWorld = /** @class */ (function () {
     GameWorld.prototype.init = function () {
         /**初始化数组 */
         this.arr_PosTu = new Array();
-        this.arr_redC = new Array();
         this.arr_greenC = new Array();
-        this.arr_CanGo = new Array();
         /**创建UI */
         this.gameUI = new ui.gameUI();
         Laya.stage.addChild(this.gameUI);
@@ -35,7 +33,6 @@ var GameWorld = /** @class */ (function () {
     };
     /**private */
     GameWorld.prototype.mouseUp = function () {
-        this.arr_CanGo = [];
         this.mouseTest.mouseIsDown = false;
         this.mouseTest.mousePos = 0;
     };
@@ -43,69 +40,15 @@ var GameWorld = /** @class */ (function () {
     GameWorld.prototype.mouseT = function () {
         /**调用鼠标检测 */
         if (this.mouseTest.mouseIsDown) {
+            var isColiderTu = true;
             var mX = Laya.stage.mouseX;
             var mY = Laya.stage.mouseY;
-            //墙
-            for (var i = 0; i < this.arr_PosTu.length; i++) {
-                if (Tool.ins.countDic_2(this.arr_PosTu[i].x, this.arr_PosTu[i].y, 30, mX, mY, this.mouseTest.r) < 30) {
-                    var isBreak = false;
-                    for (var g = 0; g < this.arr_CanGo.length; g++) {
-                        if (this.arr_CanGo[g] === null) {
-                            isBreak = true;
-                            break;
-                        }
-                        else
-                            isBreak = false;
-                    }
-                    if (isBreak == true)
-                        break;
-                    this.arr_CanGo.push(null);
-                    // console.log(this.arr_CanGo);   
-                    break;
-                }
-            }
-            //绿球
-            for (var i = 0; i < this.arr_greenC.length; i++) {
-                if (Tool.ins.countDic_2(this.arr_greenC[i].spriteCircle.x, this.arr_greenC[i].spriteCircle.y, this.arr_greenC[i].r, mX, mY, this.mouseTest.r) < this.arr_greenC[i].r) {
-                    var isBreak = false;
-                    for (var g = 0; g < this.arr_CanGo.length; g++) {
-                        if (this.arr_CanGo[g] === true) {
-                            isBreak = true;
-                            break;
-                        }
-                        else
-                            isBreak = false;
-                    }
-                    if (isBreak == true)
-                        break;
-                    this.arr_CanGo.push(true);
-                    // console.log(this.arr_CanGo);
-                    break;
-                }
-            }
-            //红球
-            for (var i = 0; i < this.arr_redC.length; i++) {
-                if (Tool.ins.countDic_2(this.arr_redC[i].spriteCircle.x, this.arr_redC[i].spriteCircle.y, this.arr_redC[i].r, mX, mY, this.mouseTest.r) < this.arr_redC[i].r) {
-                    var isBreak = false;
-                    for (var g = 0; g < this.arr_CanGo.length; g++) {
-                        if (this.arr_CanGo[g] === false) {
-                            isBreak = true;
-                            break;
-                        }
-                        else
-                            isBreak = false;
-                    }
-                    if (isBreak == true)
-                        break;
-                    this.arr_CanGo.push(false);
-                    // console.log(this.arr_CanGo);
-                    break;
-                }
-            }
+            /**每次刷新碰墙事件 */
+            isColiderTu = this.mouseColiderTu(mX, mY);
             //生成区域
-            if (this.arr_CanGo[0] == false && this.arr_CanGo[1] == true && this.arr_CanGo.length < 3) {
-                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 25) {
-                    this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
+            if (isColiderTu) {
+                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 30) {
+                    //this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
                     this.mouseTest.mousePos = 0;
                     this.mouseTest.mousePos_remX = mX;
                     this.mouseTest.mousePos_remY = mY;
@@ -114,15 +57,18 @@ var GameWorld = /** @class */ (function () {
             }
         }
     };
+    /**鼠标碰墙事件 */
+    GameWorld.prototype.mouseColiderTu = function (x, y) {
+        for (var i = 0; i < this.arr_PosTu.length; i++) {
+            if (Math.sqrt(Math.pow(this.arr_PosTu[i].x - x, 2) + Math.pow(this.arr_PosTu[i].y - y, 2)) < 20) {
+                return false;
+            }
+        }
+        return true;
+    };
     /**创建红绿 */
     GameWorld.prototype.createGR = function () {
         var c;
-        /**红 */
-        for (var i = 0; i < 6; i++) {
-            c = new RedC(515 + i * 20, 285, 10);
-            this.gameUI.sprite_go.addChild(c.spriteCircle);
-            this.arr_redC.push(c);
-        }
         /**绿*/
         for (var i = 0; i < 6; i++) {
             c = new GreenC(515 + i * 20, 300, 15);
@@ -132,7 +78,7 @@ var GameWorld = /** @class */ (function () {
     };
     /**创建鼠标对象 */
     GameWorld.prototype.createMouse = function () {
-        this.mouseTest = new MouseTest(100, 200, 35, "#fff", "#fff");
+        this.mouseTest = new MouseTest(100, 200, 30, "#fff", "#fff");
         this.gameUI.sprite_go.addChild(this.mouseTest.spriteCircle);
     };
     /**土排版*/

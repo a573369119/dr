@@ -32,7 +32,7 @@ class Tool{
     }    
     
     /**碰撞检测 - 计算距离    1=碰撞  2=相切  3=相离*/
-    public countDic_2(x1,y1,r1,x2,y2,r2) : number
+    public countDic_2(x1,y1,x2,y2) : number
     {
         return Math.sqrt(Math.pow(x1 - x2,2) + Math.pow(y1 - y2,2));
     }

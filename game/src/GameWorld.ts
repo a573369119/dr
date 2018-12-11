@@ -6,12 +6,9 @@ class GameWorld{
 
     /**mouse */
     private mouseTest : MouseTest ; 
-    /**红球 */
-    private arr_redC : Array<RedC> ;
+
 
     private arr_greenC : Array<GreenC>; 
-    /**通过栈  1=墙壁  2=false  3=true*/
-    private arr_CanGo : Array<boolean>;
 
     /**Water */
     private arr_Water : Array<Water>; 
@@ -35,9 +32,7 @@ class GameWorld{
     {
         /**初始化数组 */
         this.arr_PosTu = new Array<any>();
-        this.arr_redC = new Array<RedC>();
         this.arr_greenC = new Array<GreenC>();
-        this.arr_CanGo = new Array<boolean>();
         /**创建UI */
         this.gameUI = new ui.gameUI();
         Laya.stage.addChild(this.gameUI);
@@ -62,7 +57,6 @@ class GameWorld{
     /**private */
     private mouseUp() : void
     {
-        this.arr_CanGo = [];
         this.mouseTest.mouseIsDown = false;
         this.mouseTest.mousePos = 0;
     }
@@ -72,103 +66,42 @@ class GameWorld{
         /**调用鼠标检测 */
         if (this.mouseTest.mouseIsDown) 
         {
+            let isColiderTu : boolean = true;
             let mX = Laya.stage.mouseX;
             let mY = Laya.stage.mouseY;
-            //墙
-            for(let i=0;i<this.arr_PosTu.length;i++)
-            {
-                    if(Tool.ins.countDic_2(this.arr_PosTu[i].x,this.arr_PosTu[i].y,30,mX,mY,this.mouseTest.r)< 30)
-                    {
-                        let isBreak = false;
-                        for(let g=0; g<this.arr_CanGo.length ; g++)
-                        {
-                            if(this.arr_CanGo[g] === null)
-                            {
-                                isBreak = true;
-                                break;
-                            }
-                            else
-                                isBreak = false;
-                        }
-                        if(isBreak == true) break;
-                        this.arr_CanGo.push(null);
-                        // console.log(this.arr_CanGo);   
-                        break;
-                    }
-            }
-            //绿球
-            for(let i=0;i<this.arr_greenC.length;i++)
-            {
-                if(Tool.ins.countDic_2(this.arr_greenC[i].spriteCircle.x,this.arr_greenC[i].spriteCircle.y,this.arr_greenC[i].r,mX,mY,this.mouseTest.r)< this.arr_greenC[i].r)
-                {
-                        let isBreak = false;
-                        for(let g=0; g<this.arr_CanGo.length ; g++)
-                        {
-                            if(this.arr_CanGo[g] === true)
-                            {
-                                isBreak = true;
-                                break;
-                            }
-                            else
-                                isBreak = false;
-                        }
-                        if(isBreak == true) break;
-                        this.arr_CanGo.push(true);
-                        // console.log(this.arr_CanGo);
-                        break;
-                    }
-                }
-            //红球
-            for(let i=0;i<this.arr_redC.length;i++)
-            {
-                if(Tool.ins.countDic_2(this.arr_redC[i].spriteCircle.x,this.arr_redC[i].spriteCircle.y,this.arr_redC[i].r,mX,mY,this.mouseTest.r)< this.arr_redC[i].r)
-                {
-                        let isBreak = false;
-                        for(let g=0; g<this.arr_CanGo.length ; g++)
-                        {
-                            if(this.arr_CanGo[g] === false)
-                            {
-                                isBreak = true;
-                                break;
-                            }
-                            else
-                                isBreak = false;
-                        }
-                        if(isBreak == true) break;
-                        this.arr_CanGo.push(false);
-                        // console.log(this.arr_CanGo);
-                        break;
-                }
-            }
-            
-
+            /**每次刷新碰墙事件 */
+            isColiderTu = this.mouseColiderTu(mX,mY);
             //生成区域
-            if(this.arr_CanGo[0] == false && this.arr_CanGo[1] == true && this.arr_CanGo.length <3)
+            if(isColiderTu)
             {
-                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 25) 
+                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 30) 
                 {
 
-                    this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
-                    this.mouseTest.mousePos = 0;
-                    this.mouseTest.mousePos_remX = mX;
-                    this.mouseTest.mousePos_remY = mY;
-                    // console.log(Laya.stage.mouseX+","+Laya.stage.mouseX);
+                        //this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
+                        this.mouseTest.mousePos = 0;
+                        this.mouseTest.mousePos_remX = mX;
+                        this.mouseTest.mousePos_remY = mY;
+                        // console.log(Laya.stage.mouseX+","+Laya.stage.mouseX);
                 }
             }
         }
     }
-
+    /**鼠标碰墙事件 */
+    private mouseColiderTu(x,y) : boolean
+    {
+        for(let i=0; i<this.arr_PosTu.length; i++)
+        {
+            if(Math.sqrt(Math.pow(this.arr_PosTu[i].x - x, 2) + Math.pow(this.arr_PosTu[i].y - y, 2)) < 20)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     /**创建红绿 */
     private createGR() : void
     {
         let c;
-        /**红 */
-        for(let i=0; i < 6; i++)
-        {
-            c = new RedC(515+i*20,285,10);
-            this.gameUI.sprite_go.addChild(c.spriteCircle);
-            this.arr_redC.push(c);
-        }
         /**绿*/
         for(let i=0; i < 6;i++)
         {
@@ -181,7 +114,7 @@ class GameWorld{
     /**创建鼠标对象 */
     private createMouse() : void
     {
-        this.mouseTest = new MouseTest(100,200,35,"#fff","#fff");
+        this.mouseTest = new MouseTest(100,200,30,"#fff","#fff");
         this.gameUI.sprite_go.addChild(this.mouseTest.spriteCircle);                  
         
     }

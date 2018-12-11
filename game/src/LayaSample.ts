@@ -16,11 +16,11 @@ class GameMain{
         Laya.Stat.show(0,0);
         //舞台对齐设置
         console.log("舞台初始化完成");
-        // var arr = [
-                        
-        // ]
-        // Laya.loader.load(arr,Laya.Handler.create(this,this.goGame));
-        this.goGame();
+        var arr = [
+            {url:"res/atlas/assets.atlas"},
+            
+        ]
+        Laya.loader.load(arr,Laya.Handler.create(this,this.goGame));
     }
 
     private goGame() : void
