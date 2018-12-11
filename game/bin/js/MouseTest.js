@@ -58,6 +58,37 @@ var MouseTest = /** @class */ (function (_super) {
     MouseTest.prototype.drwaC = function (x, y) {
         this.spriteCircle.graphics.drawCircle(x, y, this.r, this.color, this.color, 2);
     };
+    // /**调用鼠标检测 */
+    // public testMouse() : any
+    // {
+    //     if(this.mouseIsDown)
+    //     {
+    //         let mX = Laya.stage.mouseX;
+    //         let mY = Laya.stage.mouseY; 
+    //         if(Math.sqrt(Math.pow(this.mousePos_remX - mX,2)+Math.pow(this.mousePos_remY-mY,2)) >25)
+    //         {
+    //             this.drwaC(Laya.stage.mouseX,Laya.stage.mouseY);
+    //             this.mousePos = 0;
+    //             this.mousePos_remX = mX;
+    //             this.mousePos_remY = mY;
+    //             let object : any = {};
+    //             object.x = Laya.stage.mouseX;
+    //             object.y = Laya.stage.mouseY;
+    //             return object;
+    //         }
+    //         else
+    //         {
+    //             return null;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         return null;
+    //     }
+    // }
+    /***鼠标 推挤 */
+    MouseTest.prototype.pushGreen = function (green) {
+    };
     return MouseTest;
 }(Circle));
 //# sourceMappingURL=MouseTest.js.map

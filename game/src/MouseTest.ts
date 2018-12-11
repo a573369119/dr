@@ -105,6 +105,10 @@ class MouseTest extends Circle{
     //         return null;
     //     }
     // }
-
+    /***鼠标 推挤 */
+    public pushGreen(green:GreenC) : void
+    {
+        
+    }
 
 }
