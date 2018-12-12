@@ -12,6 +12,7 @@ var GameWorld = /** @class */ (function () {
         /**初始化数组 */
         this.arr_PosTu = new Array();
         this.arr_greenC = new Array();
+        this.mousePos = new Array();
         /**创建UI */
         this.gameUI = new ui.gameUI();
         Laya.stage.addChild(this.gameUI);
@@ -48,6 +49,10 @@ var GameWorld = /** @class */ (function () {
             //生成区域
             if (isColiderTu) {
                 if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 50) {
+                    var mousePos = {};
+                    mousePos.x = mX;
+                    mousePos.y = mY;
+                    this.mousePos.push(mousePos); //记录坐标点
                     this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
                     this.mouseTest.mousePos = 0;
                     this.mouseTest.mousePos_remX = mX;
@@ -96,10 +101,7 @@ var GameWorld = /** @class */ (function () {
                 var tu_2 = this.getRcentTu("end");
                 //头结点与最近的土
                 this.linkManager.update(tu, tu_2);
-            }
-            else {
-                // console.log("<<<??" + arr[i].x + ","  + arr[i].y);
-                // console.log(arr[i]);
+                this.linkManager.updateDestory(this.mousePos);
             }
         }
     };

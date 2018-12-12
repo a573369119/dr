@@ -197,6 +197,7 @@ class LinkManager {
     private newGreenC(x,y) : GreenC
     {
         let greenC = new GreenC(x,y,30);
+        // greenC.spriteCircle.visible = false;
         this.view.addChild(greenC.spriteCircle);
         return greenC;
     }
@@ -226,5 +227,35 @@ class LinkManager {
         }
         console.log(" ==> end");
         console.log(this.linkEndPoint.next);
+    }
+
+//-------------------------------------------------------------------------------------------
+    /**检测是否消除 */
+    public updateDestory(arr_MousePos:Array<any>) : void
+    {
+        let mX = Laya.stage.mouseX;
+        let mY = Laya.stage.mouseY;
+        let selectArr = [];
+        for(let i=0;i<arr_MousePos.length;i++)
+        {
+            if(Tool.ins.countDic_2(arr_MousePos[i].x,arr_MousePos[i].y,mX,mY) < 100)
+            {
+                selectArr.push(arr_MousePos[i]);
+            }
+        }
+        this.linkMovePoint = this.linkHeadPoint;
+        while(this.linkMovePoint.next)
+        {
+            //循环检测距离
+            for(let h=0;h<selectArr.length;h++)
+            {
+                if(Tool.ins.countDic_2(selectArr[h].x,selectArr[h].y,this.linkMovePoint.g.spriteCircle.x,this.linkMovePoint.g.spriteCircle.y)<20)
+                {
+                    console.log("距离小于");
+                }
+
+            }
+            this.linkMovePoint = this.linkMovePoint.next;
+        }
     }
 }

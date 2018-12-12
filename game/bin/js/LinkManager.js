@@ -153,6 +153,7 @@ var LinkManager = /** @class */ (function () {
     /**新建绿色球 */
     LinkManager.prototype.newGreenC = function (x, y) {
         var greenC = new GreenC(x, y, 30);
+        // greenC.spriteCircle.visible = false;
         this.view.addChild(greenC.spriteCircle);
         return greenC;
     };
@@ -178,6 +179,28 @@ var LinkManager = /** @class */ (function () {
         }
         console.log(" ==> end");
         console.log(this.linkEndPoint.next);
+    };
+    //-------------------------------------------------------------------------------------------
+    /**检测是否消除 */
+    LinkManager.prototype.updateDestory = function (arr_MousePos) {
+        var mX = Laya.stage.mouseX;
+        var mY = Laya.stage.mouseY;
+        var selectArr = [];
+        for (var i = 0; i < arr_MousePos.length; i++) {
+            if (Tool.ins.countDic_2(arr_MousePos[i].x, arr_MousePos[i].y, mX, mY) < 100) {
+                selectArr.push(arr_MousePos[i]);
+            }
+        }
+        this.linkMovePoint = this.linkHeadPoint;
+        while (this.linkMovePoint.next) {
+            //循环检测距离
+            for (var h = 0; h < selectArr.length; h++) {
+                if (Tool.ins.countDic_2(selectArr[h].x, selectArr[h].y, this.linkMovePoint.g.spriteCircle.x, this.linkMovePoint.g.spriteCircle.y) < 20) {
+                    console.log("距离小于");
+                }
+            }
+            this.linkMovePoint = this.linkMovePoint.next;
+        }
     };
     return LinkManager;
 }());
