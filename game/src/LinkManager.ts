@@ -189,7 +189,9 @@ class LinkManager {
     {   
         let g = valueG;
         let Point = new GreenPoint(g);
+
         this.arr_GreenColider.push(valueG);
+
         return Point;
     }
 
@@ -251,7 +253,7 @@ class LinkManager {
             {
                 if(Tool.ins.countDic_2(selectArr[h].x,selectArr[h].y,this.linkMovePoint.g.spriteCircle.x,this.linkMovePoint.g.spriteCircle.y)<20)
                 {
-                    console.log("距离小于");
+                    this.arr_GreenColider.pop();
                 }
 
             }

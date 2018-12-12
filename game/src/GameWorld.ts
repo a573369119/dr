@@ -23,7 +23,7 @@ class GameWorld{
     /**穿山甲 */
     private monster : Monster;
     /**水滴数 */
-    private waterCount : number = 120;
+    private waterCount : number = 5;
     /**土数量 */
     private tuCount : number = 50;
 
@@ -85,18 +85,17 @@ class GameWorld{
             {
                 if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 50) 
                 {
-                    for(let h=0;h<this.mousePos.length ; h++)
+                    //是否记入点
+
+                    if(this.canKeepInMousePos(mX,mY))
                     {
-                        for(let m=0; m<this.mousePos.length; m++)
-                        {
-                            let mousePos : any = {};
-                            mousePos.x = mX;
-                            mousePos.y = mY;
-                            this.mousePos.push(mousePos);//记录坐标点
-                        }
+                        let mousePos: any = {};
+                        mousePos.x = mX;
+                        mousePos.y = mY;
+                        this.mousePos.push(mousePos);//记录坐标点
                     }
 
-                        this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
+                        //this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
                         
                         this.mouseTest.mousePos = 0;
                         this.mouseTest.mousePos_remX = mX;
@@ -107,6 +106,20 @@ class GameWorld{
             }
         }
         ////////////////
+    }
+    /**判断是否是重合点 */
+    private canKeepInMousePos(mX,mY) : boolean
+    {
+        for (let h = 0; h < this.mousePos.length; h++)  
+        {
+            if (Tool.ins.countDic_2(this.mousePos[h].x, this.mousePos[h].y, mX, mY) < 40)  
+            {
+                console.log("不做记录");
+                return false;
+            }
+
+        }
+        return true;
     }
     /**鼠标碰墙事件 */
     private mouseColiderTu(x,y) : boolean
@@ -156,7 +169,7 @@ class GameWorld{
                 let tu_2  = this.getRcentTu("end");
                 //头结点与最近的土
                 this.linkManager.update(tu,tu_2);
-                this.linkManager.updateDestory(this.mousePos);
+                // this.linkManager.updateDestory(this.mousePos);
             }
         }
     
@@ -285,7 +298,7 @@ class GameWorld{
         let y=0;
         for(let i=0; i<3;i++)
         {
-            tu = new Tu(650+i*10,310,30,"#880","#880");
+            tu = new Tu(650-21+i*10,310-7,30,"#880","#880");
             tu.destroyCircle();
             Laya.Pool.recover("tu",tu);
             this.gameUI.sprite_go.addChild(tu.spriteCircle);                  
@@ -298,8 +311,8 @@ class GameWorld{
              object = {};
             //  tu = new Tu(650+i*10,310,30,"#880","#880");
             //  this.arr_Tu_1.push(tu);
-             object.x = 650+i*10;
-             object.y = 310;
+             object.x = 650+i*10-21;
+             object.y = 310-7;
              this.arr_PosTu.push(object);
          }
         //------------------左
@@ -308,8 +321,8 @@ class GameWorld{
              object = {};
             //  tu = new Tu(0+i * 10,310,30,"#880","#880");
             //  this.arr_Tu_1.push(tu);
-             object.x = 0+i * 10;
-             object.y = 310;
+             object.x = 0+i * 10-21;
+             object.y = 310-7;
              this.arr_PosTu.push(object);
          }
          //--------------------落下第一横边
@@ -318,8 +331,8 @@ class GameWorld{
              object = {};
             //  tu = new Tu(250+i * 10,465,30,"#880","#880");
             //  this.arr_Tu_1.push(tu);
-             object.x = 255+i * 10;
-             object.y = 465;
+             object.x = 255+i * 10 - 21;
+             object.y = 465 - 7;
              this.arr_PosTu.push(object);
          }
          // --------------------------第一斜边
@@ -328,8 +341,8 @@ class GameWorld{
              object = {};
             // tu = new Tu(i * 10 + 175,560 - i*13,30,"#880","#880");
             //  this.arr_Tu_2.push(tu);
-             object.x = i * 10 + 175;
-             object.y = 560 - i*13;
+             object.x = i * 10 + 175 - 21;
+             object.y = 560 - i*13 - 7;
              this.arr_PosTu.push(object);
          }
          //---------------------------第一竖边
@@ -338,8 +351,8 @@ class GameWorld{
              object = {};
             //  tu = new Tu(179,755 - i*10,30,"#880","#880");
             //  this.arr_Tu_2.push(tu);
-             object.x = 179;
-             object.y = 755 - i*10;
+             object.x = 179 - 21;
+             object.y = 755 - i*10 -7;
              this.arr_PosTu.push(object);
          }
          //_______________第二竖边
@@ -348,8 +361,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(133,1172 - i*10,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 133;
-              object.y = 1172 - i*10;
+              object.x = 133 - 21;
+              object.y = 1172 - i*10 -7 ;
               this.arr_PosTu.push(object);         
          }
          //______________最左竖边
@@ -358,8 +371,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(-10,1326 - i*10,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = -10;
-              object.y = 1326 - i*10;
+              object.x = -10 - 21;
+              object.y = 1326 - i*10 -7;
               this.arr_PosTu.push(object);
          }
          //______________最右竖边
@@ -368,8 +381,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(735,1326 - i*10,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 735;
-              object.y = 1326 - i*10;
+              object.x = 735 - 21;
+              object.y = 1326 - i*10 - 7;
               this.arr_PosTu.push(object);
          }
         //______________中间竖边
@@ -378,8 +391,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(328,1326 - i*10,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 328;
-              object.y = 1326 - i*10;
+              object.x = 328 -21;
+              object.y = 1326 - i*10 - 7;
               this.arr_PosTu.push(object);
          }
         //______________第二斜边
@@ -388,8 +401,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(328 + i*10,665 - i*13,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 328 + i*10;
-              object.y = 665 - i*13;
+              object.x = 328 + i*10 - 21;
+              object.y = 665 - i*13 - 7;
               this.arr_PosTu.push(object);
          }
         //______________第二横边
@@ -398,8 +411,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(383 + i*10,610,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 383 + i*10;
-              object.y = 610;
+              object.x = 383 + i*10 - 21;
+              object.y = 610 - 7;
               this.arr_PosTu.push(object);
          }
         //______________第三横边
@@ -408,8 +421,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(373 + i*10,760,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 373 + i*10;
-              object.y = 760;
+              object.x = 373 + i*10 - 21;
+              object.y = 760 - 7;
               this.arr_PosTu.push(object);
          }
         //——————————————第四横边
@@ -418,8 +431,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(672 + i*10,760,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 672 + i*10;
-              object.y = 760;
+              object.x = 672 + i*10 - 21;
+              object.y = 760 - 7;
               this.arr_PosTu.push(object);
          }
         //——————————————第五横边
@@ -428,8 +441,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(470 + i*10,909,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 470 + i*10;
-              object.y = 909;
+              object.x = 470 + i*10 - 21;
+              object.y = 909 - 7;
               this.arr_PosTu.push(object);
          }
         //——————————————第六横边
@@ -438,8 +451,8 @@ class GameWorld{
              object = {};
             //   tu = new Tu(600 + i*10,940,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 600 + i*10;
-              object.y = 940;
+              object.x = 600 + i*10 - 21;
+              object.y = 940 - 7;
               this.arr_PosTu.push(object);
          }
     }
@@ -544,7 +557,16 @@ class GameWorld{
                         }
                         else
                         {
-                            this.coliderTu(water,gC);
+                            
+                            if(this.coliderTest(gC))
+                            {
+                                console.log("在白点不能碰撞");
+                            }
+                            else
+                            {
+                                water.setColider(gC,this.arr_PosTu);
+                            }
+                            
                         }
                     }
                     else
@@ -556,6 +578,20 @@ class GameWorld{
             ///
 
         });
+    }
+
+    /**是否在白点 */
+    private coliderTest(gC) : boolean
+    {
+        for(let i=0; i< this.mousePos.length;i++)
+        {
+            if(Tool.ins.countDic_2(gC.spriteCircle.x,gC.spriteCircle.y,this.mousePos[i].x,this.mousePos[i].y) < 35)
+            {
+                gC.spriteCircle.visible = false;
+                return true;
+            }
+        }
+        return false;
     }
 
 }

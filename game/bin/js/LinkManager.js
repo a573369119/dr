@@ -196,7 +196,7 @@ var LinkManager = /** @class */ (function () {
             //循环检测距离
             for (var h = 0; h < selectArr.length; h++) {
                 if (Tool.ins.countDic_2(selectArr[h].x, selectArr[h].y, this.linkMovePoint.g.spriteCircle.x, this.linkMovePoint.g.spriteCircle.y) < 20) {
-                    console.log("距离小于");
+                    this.arr_GreenColider.pop();
                 }
             }
             this.linkMovePoint = this.linkMovePoint.next;

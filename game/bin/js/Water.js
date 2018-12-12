@@ -123,7 +123,7 @@ var Water = /** @class */ (function (_super) {
      * 是否给弹跳初速度
      *
      */
-    Water.prototype.setColider = function (tu, v) {
+    Water.prototype.setColider = function (tu, arr_MousePos, v) {
         if (this.countDic(tu) < 45) {
             var getA = this.dic_A.get(tu);
             if (!getA) {
@@ -225,6 +225,11 @@ var Water = /** @class */ (function (_super) {
     /**碰撞检测 - 计算距离*/
     Water.prototype.countDic = function (tu) {
         var dic = Math.sqrt(Math.pow(tu.spriteCircle.x - this.spriteCircle.x, 2) + Math.pow(tu.spriteCircle.y - this.spriteCircle.y, 2));
+        return dic;
+    };
+    /**碰撞检测 - 计算距离 */
+    Water.prototype.countDic_2 = function (obj) {
+        var dic = Math.sqrt(Math.pow(obj.x - this.spriteCircle.x, 2) + Math.pow(obj.y - this.spriteCircle.y, 2));
         return dic;
     };
     //-----------------------------------------------------------不变力----------------------------------

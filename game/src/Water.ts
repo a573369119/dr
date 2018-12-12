@@ -171,9 +171,9 @@ class Water extends Circle{
      * 是否给弹跳初速度
      * 
      */
-     public setColider(tu : Tu, v? : number) : void
+     public setColider(tu : any,arr_MousePos? : Array<any>, v? : number) : void
      {
-        if(this.countDic(tu) < 45)
+        if(this.countDic(tu) < 45 )
         {
             let getA = this.dic_A.get(tu);
             if(!getA)
@@ -306,6 +306,13 @@ class Water extends Circle{
     private countDic(tu:Tu) : number
     {
         let dic = Math.sqrt(Math.pow(tu.spriteCircle.x - this.spriteCircle.x,2) + Math.pow(tu.spriteCircle.y - this.spriteCircle.y,2));
+        return dic;
+    }
+
+    /**碰撞检测 - 计算距离 */
+    private countDic_2(obj) : number
+    {
+        let dic = Math.sqrt(Math.pow(obj.x - this.spriteCircle.x,2) + Math.pow(obj.y - this.spriteCircle.y,2));
         return dic;
     }
 //-----------------------------------------------------------不变力----------------------------------
