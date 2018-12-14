@@ -58,7 +58,6 @@ class MouseTest extends Circle{
     {
         let mX = Laya.stage.mouseX;
         let mY = Laya.stage.mouseY;
-        console.log("鼠标Pos：(" + mX + "," + mY + ")");
         if(this.mousePos == 0)
         {//未记录
             this.mousePos_remX = mX;

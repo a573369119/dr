@@ -61,8 +61,8 @@ class Water extends Circle{
         this.moe = 1;
         this.spd = 0.002;
 
-        this.v_X = 10;
-        this.v_Y = 100;
+        this.v_X = 0;
+        this.v_Y = 0;
         this.a_X = 0;
         this.a_Y = 0;
 
@@ -130,6 +130,7 @@ class Water extends Circle{
                 this.add("a_Y",arr[1]);
             }
         }
+        // console.log(this.a_X + "            " + this.a_Y);
     }
 
     /**统一处理 */
@@ -178,13 +179,23 @@ class Water extends Circle{
             let getA = this.dic_A.get(tu);
             if(!getA)
             {
-                let a = this.a_X * this.rotationDeal(tu,"cos") + this.a_Y * this.rotationDeal(tu,"sin");
+                //let a = this.a_X * this.rotationDeal(tu,"cos") + this.a_Y * this.rotationDeal(tu,"sin");
 
                 this.addDic(tu,-1000 * this.rotationDeal(tu,"cos") * this.moe,-1000 * this.rotationDeal(tu,"sin") * this.moe,2);
                 this.destorySpeed(tu);            
             }
         }
         
+     }
+     /**风吹力 */
+     public setWindForce(wind,x,y) : void
+     {
+            let getA = this.dic_A.get(wind);
+            if(!getA)
+            {
+                this.addDic(wind,x,y,2);
+                //  console.log(this.dic_A);
+            }
      }
 
      /**碰撞速度消耗*/
@@ -213,7 +224,6 @@ class Water extends Circle{
          if(this.dic_A.get(tu))
          {
             this.dic_A.remove(tu);
-            //console.log("移除弹力");
          }
      }
 
@@ -328,5 +338,10 @@ class Water extends Circle{
     private downForce(): void  
     {
         this.addDic("dowmForce",0,this.g,2);
+    }
+    /**水消失 */
+    public distroyWater() : void
+    {
+        this.spriteCircle.visible = false;
     }
 }

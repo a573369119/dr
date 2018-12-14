@@ -14,7 +14,7 @@ var LinkManager = /** @class */ (function () {
         //15绿球半径 30直径
         var count = Math.floor(dic / 30);
         var widthDic = (dic / 30) % 1;
-        console.log(widthDic);
+        // console.log(widthDic);
         this.linkMovePoint = this.linkHeadPoint;
         var c;
         var p;
@@ -59,7 +59,7 @@ var LinkManager = /** @class */ (function () {
         //查看最近的土的距离
         //土1
         var dic = Tool.ins.countDic_2(this.linkHeadPoint.g.spriteCircle.x, this.linkHeadPoint.g.spriteCircle.y, tu.x, tu.y);
-        if (dic > 40) {
+        if (dic > 30) {
             x = (this.linkHeadPoint.g.spriteCircle.x + this.linkHeadPoint.last.g.x) / 2;
             y = (this.linkHeadPoint.g.spriteCircle.y + this.linkHeadPoint.last.g.y) / 2;
             this.addPointTo("head", this.linkHeadPoint.last, x, y);
@@ -67,7 +67,7 @@ var LinkManager = /** @class */ (function () {
         }
         //土2
         dic = Tool.ins.countDic_2(this.linkEndPoint.g.spriteCircle.x, this.linkEndPoint.g.spriteCircle.y, tu2.x, tu2.y);
-        if (dic > 40) {
+        if (dic > 30) {
             x = (this.linkEndPoint.g.spriteCircle.x + this.linkEndPoint.next.g.x) / 2;
             y = (this.linkEndPoint.g.spriteCircle.y + this.linkEndPoint.next.g.y) / 2;
             this.addPointTo("end", this.linkEndPoint, x, y);
@@ -83,7 +83,7 @@ var LinkManager = /** @class */ (function () {
             dic = this.linkMovePoint.getNextDic();
             // console.log(dic);
             //循环检测距离
-            if (dic > 40) {
+            if (dic > 30) {
                 // console.log("创建小球"); 
                 x = (this.linkMovePoint.g.spriteCircle.x + this.linkMovePoint.next.g.spriteCircle.x) / 2;
                 y = (this.linkMovePoint.g.spriteCircle.y + this.linkMovePoint.next.g.spriteCircle.y) / 2;
@@ -114,7 +114,7 @@ var LinkManager = /** @class */ (function () {
         currentNode.next = null;
         currentNode.last = null;
         this.linkMovePoint = keepNextNode;
-        console.log("回收两个");
+        // console.log("回收两个");
     };
     /**添加新节点  在point 后面加一个节点*/
     LinkManager.prototype.addPointTo = function (stringName, point, x, y) {
@@ -125,7 +125,7 @@ var LinkManager = /** @class */ (function () {
         }
         else {
             newP.setPos(x, y);
-            console.log("对象池");
+            // console.log("对象池");
         }
         newP.next = point.next;
         if (stringName == "head") {
@@ -137,7 +137,7 @@ var LinkManager = /** @class */ (function () {
             newP.last = point;
             this.linkEndPoint.next = newP;
             this.linkEndPoint = this.linkEndPoint.next;
-            console.log("新添加节点：");
+            // console.log("新添加节点：");
             console.log(this.linkEndPoint.last);
         }
         point.next = newP;
@@ -165,7 +165,7 @@ var LinkManager = /** @class */ (function () {
         currentNode.next.next = null;
         currentNode.next.reGet();
         currentNode.next = node;
-        console.log("回收");
+        // console.log("回收");
     };
     /**遍历链表 */
     LinkManager.prototype.logLink = function () {

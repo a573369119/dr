@@ -29,7 +29,7 @@ class LinkManager {
         //15绿球半径 30直径
         let count = Math.floor(dic/30);
         let widthDic = (dic/30)%1;
-        console.log(widthDic);
+        // console.log(widthDic);
         this.linkMovePoint = this.linkHeadPoint;
         let c : GreenC ;
         let p : GreenPoint; 
@@ -75,25 +75,25 @@ class LinkManager {
         //更新最近的土
         this.linkHeadPoint.last.g = tu;
         this.linkEndPoint.next.g = tu2;
-        let x : number;
-        let y : number;
+        let x: number;
+        let y: number;
         //查看最近的土的距离
         //土1
-        let dic = Tool.ins.countDic_2(this.linkHeadPoint.g.spriteCircle.x,this.linkHeadPoint.g.spriteCircle.y,tu.x,tu.y);
-        if(dic > 40)
+        let dic = Tool.ins.countDic_2(this.linkHeadPoint.g.spriteCircle.x, this.linkHeadPoint.g.spriteCircle.y, tu.x, tu.y);
+        if (dic > 30) 
         {
-            x = (this.linkHeadPoint.g.spriteCircle.x + this.linkHeadPoint.last.g.x)/2;
-            y = (this.linkHeadPoint.g.spriteCircle.y + this.linkHeadPoint.last.g.y)/2;
-            this.addPointTo("head",this.linkHeadPoint.last,x,y);
+            x = (this.linkHeadPoint.g.spriteCircle.x + this.linkHeadPoint.last.g.x) / 2;
+            y = (this.linkHeadPoint.g.spriteCircle.y + this.linkHeadPoint.last.g.y) / 2;
+            this.addPointTo("head", this.linkHeadPoint.last, x, y);
             //更换父节点
         }
         //土2
-        dic = Tool.ins.countDic_2(this.linkEndPoint.g.spriteCircle.x,this.linkEndPoint.g.spriteCircle.y,tu2.x,tu2.y);
-        if(dic > 40)
+        dic = Tool.ins.countDic_2(this.linkEndPoint.g.spriteCircle.x, this.linkEndPoint.g.spriteCircle.y, tu2.x, tu2.y);
+        if (dic > 30) 
         {
-            x = (this.linkEndPoint.g.spriteCircle.x + this.linkEndPoint.next.g.x)/2;
-            y = (this.linkEndPoint.g.spriteCircle.y + this.linkEndPoint.next.g.y)/2;
-            this.addPointTo("end",this.linkEndPoint,x,y);
+            x = (this.linkEndPoint.g.spriteCircle.x + this.linkEndPoint.next.g.x) / 2;
+            y = (this.linkEndPoint.g.spriteCircle.y + this.linkEndPoint.next.g.y) / 2;
+            this.addPointTo("end", this.linkEndPoint, x, y);
         }
 
         //球与球之间
@@ -109,7 +109,7 @@ class LinkManager {
             dic = this.linkMovePoint.getNextDic();
             // console.log(dic);
             //循环检测距离
-            if(dic > 40)
+            if(dic > 30)
             {
                 // console.log("创建小球"); 
                 x = (this.linkMovePoint.g.spriteCircle.x + this.linkMovePoint.next.g.spriteCircle.x)/2;
@@ -147,7 +147,7 @@ class LinkManager {
         currentNode.next = null;
         currentNode.last = null;
         this.linkMovePoint = keepNextNode;
-        console.log("回收两个");
+        // console.log("回收两个");
     }
 
 
@@ -163,7 +163,7 @@ class LinkManager {
         else
         {
             newP.setPos(x,y);
-            console.log("对象池");
+            // console.log("对象池");
         }
         newP.next = point.next;
         if(stringName == "head")
@@ -177,7 +177,7 @@ class LinkManager {
             newP.last = point;
             this.linkEndPoint.next = newP;
             this.linkEndPoint = this.linkEndPoint.next;
-            console.log("新添加节点：");
+            // console.log("新添加节点：");
             console.log(this.linkEndPoint.last);
         }
         point.next = newP;
@@ -212,7 +212,7 @@ class LinkManager {
         currentNode.next.next = null;
         currentNode.next.reGet();
         currentNode.next = node;
-        console.log("回收");
+        // console.log("回收");
     }
 
     /**遍历链表 */

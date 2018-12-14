@@ -47,7 +47,6 @@ var MouseTest = /** @class */ (function (_super) {
     MouseTest.prototype.remPos = function () {
         var mX = Laya.stage.mouseX;
         var mY = Laya.stage.mouseY;
-        console.log("鼠标Pos：(" + mX + "," + mY + ")");
         if (this.mousePos == 0) { //未记录
             this.mousePos_remX = mX;
             this.mousePos_remY = mY;

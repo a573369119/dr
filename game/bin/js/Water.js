@@ -38,8 +38,8 @@ var Water = /** @class */ (function (_super) {
         this.actionMof = 1;
         this.moe = 1;
         this.spd = 0.002;
-        this.v_X = 10;
-        this.v_Y = 100;
+        this.v_X = 0;
+        this.v_Y = 0;
         this.a_X = 0;
         this.a_Y = 0;
         this.dic_V = new Laya.Dictionary();
@@ -91,6 +91,7 @@ var Water = /** @class */ (function (_super) {
                 this.add("a_Y", arr[1]);
             }
         }
+        // console.log(this.a_X + "            " + this.a_Y);
     };
     /**统一处理 */
     Water.prototype.dealUnified = function () {
@@ -127,10 +128,18 @@ var Water = /** @class */ (function (_super) {
         if (this.countDic(tu) < 45) {
             var getA = this.dic_A.get(tu);
             if (!getA) {
-                var a = this.a_X * this.rotationDeal(tu, "cos") + this.a_Y * this.rotationDeal(tu, "sin");
+                //let a = this.a_X * this.rotationDeal(tu,"cos") + this.a_Y * this.rotationDeal(tu,"sin");
                 this.addDic(tu, -1000 * this.rotationDeal(tu, "cos") * this.moe, -1000 * this.rotationDeal(tu, "sin") * this.moe, 2);
                 this.destorySpeed(tu);
             }
+        }
+    };
+    /**风吹力 */
+    Water.prototype.setWindForce = function (wind, x, y) {
+        var getA = this.dic_A.get(wind);
+        if (!getA) {
+            this.addDic(wind, x, y, 2);
+            //  console.log(this.dic_A);
         }
     };
     /**碰撞速度消耗*/
@@ -152,7 +161,6 @@ var Water = /** @class */ (function (_super) {
     Water.prototype.removeColider = function (tu) {
         if (this.dic_A.get(tu)) {
             this.dic_A.remove(tu);
-            //console.log("移除弹力");
         }
     };
     /**
@@ -242,6 +250,10 @@ var Water = /** @class */ (function (_super) {
      */
     Water.prototype.downForce = function () {
         this.addDic("dowmForce", 0, this.g, 2);
+    };
+    /**水消失 */
+    Water.prototype.distroyWater = function () {
+        this.spriteCircle.visible = false;
     };
     return Water;
 }(Circle));
