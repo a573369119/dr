@@ -43,6 +43,8 @@ class GameWorld{
     private msX : number;
     private msY : number;
     private isControl : boolean;
+    private rem_Mouse : number;
+    private isRemMouseChange : boolean;
 
     constructor(){
         this.init()
@@ -51,6 +53,8 @@ class GameWorld{
     private init() 
     {
         this.greenCSize = 30;
+        this.rem_Mouse = 0;
+        this.isRemMouseChange = false;
         /**初始化数组 */
         this.arr_PosTu = new Array<any>();
         this.arr_greenC = new Array<GreenC>();
@@ -146,44 +150,74 @@ class GameWorld{
             //生成区域
             if(isColiderTu)
             {
-                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 50) 
+                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 20) 
                 {
                     //是否记入点
-
-                    if(this.canKeepInMousePos(mX,mY))
+                    if(this.isControl)
                     {
-                        let mousePos: any = {};
-                        mousePos.x = mX;
-                        mousePos.y = mY;
-                        this.mousePos.push(mousePos);//记录坐标点
-                    }
+                        if(this.canKeepInMousePos(mX,mY))
+                        {
+                            let mousePos: any = {};
+                            mousePos.x = mX;
+                            mousePos.y = mY;
+                            this.mousePos.push(mousePos);//记录坐标点
+                        }
 
-                        //this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY);
-                        
-                        this.mouseTest.mousePos = 0;
-                        this.mouseTest.mousePos_remX = mX;
-                        this.mouseTest.mousePos_remY = mY;
-                        // console.log(Laya.stage.mouseX+","+Laya.stage.mouseX);
+                            this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY,this.gameUI);
+                            
+                            this.mouseTest.mousePos = 0;
+                            this.mouseTest.mousePos_remX = mX;
+                            this.mouseTest.mousePos_remY = mY;
+                            // console.log(Laya.stage.mouseX+","+Laya.stage.mouseX);
+                    }
                 }
                 this.mousePushGreen();    
             }
         }
         if(this.isControl)
         {
-            let isTrue = true;
-            for(let i =0 ;i < this.arr_PosTu.length; i++)
+            let X = Tool.ins.countDic_2(this.gameUI.player.x,this.gameUI.player.y,this.arr_PosTu[0].x,this.arr_PosTu[0].y);
+            let now : number;
+            for(let i=1;i < this.arr_PosTu.length; i++)
             {
-                if(Tool.ins.countDic_2(this.gameUI.player.x,this.gameUI.player.y,this.arr_PosTu[i].x,this.arr_PosTu[i].y) < 50)
+                now = Tool.ins.countDic_2(this.gameUI.player.x,this.gameUI.player.y,this.arr_PosTu[i].x,this.arr_PosTu[i].y);
+                if(X>now)
                 {
-                    this.isControl = false;
-                    break;   
+                    X = now;
                 }
+            }
+            if(X < 35)
+            {
+                console.log(Math.floor(this.rem_Mouse) + "now::" + Math.floor(X)  + "  差值::" + Math.floor(this. rem_Mouse - X) + " isRemChang:" + this.isRemMouseChange);
+                if(this.rem_Mouse - X > 0)
+                {
+                    if(this.isRemMouseChange == true)
+                    {
+                        this.isControl = false;
+                        this.isRemMouseChange = false;
+                        return;
+                    }  
+                }
+                else
+                {               
+                    this.rem_Mouse = X;
+                    this.isRemMouseChange = true;
+                }
+            }
+            else
+            {
+                this.rem_Mouse = 0;
+                this.isRemMouseChange = false;
             }
             this.gameUI.player.x = mX + this.msX;
             this.gameUI.player.y = mY + this.msY;
             
         }
-        ////////////////
+        ////////////////刺检测 从做到右
+        if(this.gameUI.player.x>this.gameUI.ci25.x && this.gameUI.player.y >this.gameUI.ci25.y && this.gameUI.player.y<this.gameUI.ci29.y)
+        {
+
+        }
     }
     /**判断是否是重合点 */
     private canKeepInMousePos(mX,mY) : boolean
@@ -215,39 +249,42 @@ class GameWorld{
     /**创建鼠标对象 */
     private createMouse() : void
     {
-        this.mouseTest = new MouseTest(100,200,30,"#fff","#fff");
+        this.mouseTest = new MouseTest(100,200,30,"#413006","#b09b6f");
         this.gameUI.sprite_go.addChild(this.mouseTest.spriteCircle);                  
     }
 
     /**鼠标推挤 */
     private mousePushGreen() : void
     {
-        let mX = Laya.stage.mouseX;
-        let mY = Laya.stage.mouseY;
-        let arr = [];
-        //**获取碰撞小球 */
-        for(let i=0; i< this.arr_greenC.length ; i++)
+        if(this.isControl)
         {
-            if(Tool.ins.countDic_2(this.arr_greenC[i].spriteCircle.x,this.arr_greenC[i].spriteCircle.y,mX,mY)< 50)
+            let mX = Laya.stage.mouseX;
+            let mY = Laya.stage.mouseY;
+            let arr = [];
+            //**获取碰撞小球 */
+            for(let i=0; i< this.arr_greenC.length ; i++)
             {
-                arr.push(this.arr_greenC[i]);
+                if(Tool.ins.countDic_2(this.arr_greenC[i].spriteCircle.x,this.arr_greenC[i].spriteCircle.y,mX,mY)< 50)
+                {
+                    arr.push(this.arr_greenC[i]);
+                }
             }
-        }
-        //**计算逻辑 */
-        for(let i=0;i<arr.length;i++)
-        {
-            let dic = 45 - Tool.ins.countDic_2(arr[i].spriteCircle.x,arr[i].spriteCircle.y,mX,mY);
-            if(dic > 0)
+            //**计算逻辑 */
+            for(let i=0;i<arr.length;i++)
             {
-                arr[i].spriteCircle.x += dic * this.rotationDeal(arr[i],mX,mY,"cos");
-                arr[i].spriteCircle.y += dic * this.rotationDeal(arr[i],mX,mY,"sin");
-                // console.log("成功移动");
-                // console.log(arr[i].spriteCircle.x + "," + arr[i].spriteCircle.y);
-                let tu = this.getRcentTu("head");
-                let tu_2  = this.getRcentTu("end");
-                //头结点与最近的土
-                this.linkManager.update(tu,tu_2);
-                // this.linkManager.updateDestory(this.mousePos);
+                let dic = 45 - Tool.ins.countDic_2(arr[i].spriteCircle.x,arr[i].spriteCircle.y,mX,mY);
+                if(dic > 0)
+                {
+                    arr[i].spriteCircle.x += dic * this.rotationDeal(arr[i],mX,mY,"cos");
+                    arr[i].spriteCircle.y += dic * this.rotationDeal(arr[i],mX,mY,"sin");
+                    // console.log("成功移动");
+                    // console.log(arr[i].spriteCircle.x + "," + arr[i].spriteCircle.y);
+                    let tu = this.getRcentTu("head");
+                    let tu_2  = this.getRcentTu("end");
+                    //头结点与最近的土
+                    this.linkManager.update(tu,tu_2);
+                    // this.linkManager.updateDestory(this.mousePos);
+                }
             }
         }
     
@@ -297,10 +334,10 @@ class GameWorld{
     {
         let ch = new GreenC(515,300,this.greenCSize);
         this.arr_greenC.push(ch);
-        this.gameUI.sprite_go.addChild(ch.spriteCircle);
-        let ce = new GreenC(615,300,this.greenCSize);
+        //this.gameUI.sprite_go.addChild(ch.spriteCircle);
+        let ce = new GreenC(660,300,this.greenCSize);
         this.arr_greenC.push(ce);        
-        this.gameUI.sprite_go.addChild(ce.spriteCircle);        
+        //this.gameUI.sprite_go.addChild(ce.spriteCircle);        
         let head = new GreenPoint(ch);
         let end = new GreenPoint(ce);
         this.linkManager = new LinkManager(head,end,this.gameUI.sprite_go,this.arr_greenC);
@@ -312,7 +349,7 @@ class GameWorld{
     {
         let ch = new GreenC(515,300,15);
         this.arr_greenC.push(ch);
-        this.gameUI.sprite_go.addChild(ch.spriteCircle);
+        // this.gameUI.sprite_go.addChild(ch.spriteCircle);
         return new GreenPoint(ch);
     }
 
@@ -548,7 +585,7 @@ class GameWorld{
              object = {};
             //   tu = new Tu(672 + i*10,760,30,"#880","#880");
             //   this.arr_Tu_2.push(tu);
-              object.x = 672 + i*10 - 21;
+              object.x = 700 + i*10 - 21;
               object.y = 760 - 7;
               this.arr_PosTu.push(object);
          }
@@ -675,7 +712,7 @@ class GameWorld{
                 });
                 //绿球碰撞
                 this.arr_greenC.forEach( gC => {
-                    if(gC.spriteCircle.visible == true)
+                    if(/**gC.spriteCircle.visible ==**/ true)
                     {
                         if(Tool.ins.countDic(gC,water) ==1 || Tool.ins.countDic(gC,water) ==2){
                             //处理碰撞效果
@@ -724,7 +761,7 @@ class GameWorld{
                  {
                      water.removeColider("w"+2);   
                  }
-                if(water.spriteCircle.x > 429&&water.spriteCircle.y>834&&water.spriteCircle.y<883&& this.arr_BtnWind[2] == true)
+                if(water.spriteCircle.x > 429&&water.spriteCircle.y>753&&water.spriteCircle.y<883&& this.arr_BtnWind[2] == true)
                 {
                     water.setWindForce("w"+3,-1000,-10);   
                 }
@@ -732,7 +769,7 @@ class GameWorld{
                 {
                     water.removeColider("w"+3);   
                 }
-                if(water.spriteCircle.x > 264&&water.spriteCircle.y>496&&water.spriteCircle.y<574&& water.spriteCircle.x < 511 && this.arr_BtnWind[2] == true)
+                if(water.spriteCircle.x > 264&&water.spriteCircle.y>496&&water.spriteCircle.y<580&& water.spriteCircle.x < 511 && this.arr_BtnWind[2] == true)
                 {
                     water.setWindForce("w"+4,50,0);   
                 }
@@ -774,7 +811,7 @@ class GameWorld{
         {
             if(Tool.ins.countDic_2(gC.spriteCircle.x,gC.spriteCircle.y,this.mousePos[i].x,this.mousePos[i].y) < 35)
             {
-                gC.spriteCircle.visible = false;
+                // gC.spriteCircle.visible = false;
                 return true;
             }
         }

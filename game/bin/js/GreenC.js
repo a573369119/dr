@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 var GreenC = /** @class */ (function (_super) {
     __extends(GreenC, _super);
     function GreenC(x, y, r, color, full) {
-        var _this = _super.call(this, x, y, r, "#0f0", "#0f0") || this;
+        var _this = _super.call(this, x, y, r, "#0f0", "#0f0", true) || this;
         _this.type = "g";
         return _this;
     }

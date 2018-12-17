@@ -54,7 +54,7 @@ var MouseTest = /** @class */ (function (_super) {
         this.mouseIsDown = true;
     };
     /**绘制 */
-    MouseTest.prototype.drwaC = function (x, y) {
+    MouseTest.prototype.drwaC = function (x, y, view) {
         this.spriteCircle.graphics.drawCircle(x, y, this.r, this.color, this.color, 2);
     };
     // /**调用鼠标检测 */

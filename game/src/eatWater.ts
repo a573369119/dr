@@ -17,12 +17,13 @@ class eatWater{
         this.sca = 1;
         this.call = call;
         this.caller = caller;
-        Laya.timer.loop(800,this,this.getWater);
+        Laya.timer.loop(1000,this,this.getWater);
     }
 
     /**吸水 */
     private getWater() : void
     {
+
         this.arr_water.forEach(water => {
             if(Tool.ins.countDic_2(this.eatUI.x,this.eatUI.y,water.spriteCircle.x,water.spriteCircle.y) < 20)
             {

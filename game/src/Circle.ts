@@ -2,25 +2,31 @@ class Circle{
     /**半径记录 */
      public r : number;
     /**圆所在的sprite */
-     public spriteCircle : Laya.Sprite;
+     public spriteCircle : any;
     // public speed : number;
     // public count : number = 5;//精确值 5个像素 
 
-     constructor(x,y,r,color,Full,speed?){
+     constructor(x,y,r,color,Full,isDraw?){
          this.r = r;
-         this.drawSelf(x,y,r,color,Full);
+         this.drawSelf(x,y,r,color,Full,isDraw);
      }
 
 
-     protected drawSelf(x,y,r,color,Full)　: void
+     protected drawSelf(x,y,r,color,Full,isDraw?)　: void
      {
-         
-         this.spriteCircle = new Laya.Sprite();
+         if(!isDraw)
+         {
+            this.spriteCircle = new Laya.Sprite();
+            this.spriteCircle.pivot(this.spriteCircle.width/2,this.spriteCircle.height/2);//焦点在中心
+         }
+         else
+            this.spriteCircle = new SCirle();
          //Laya.stage.addChild(this.spriteCircle);
-         this.spriteCircle.pivot(this.spriteCircle.width/2,this.spriteCircle.height/2);//焦点在中心
          this.spriteCircle.x = x;
          this.spriteCircle.y = y;
+         if(!isDraw)
          this.spriteCircle.graphics.drawCircle(0,0,this.r,Full,color,2);
+
          this.init();
      }
 

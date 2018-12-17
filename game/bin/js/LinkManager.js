@@ -26,7 +26,7 @@ var LinkManager = /** @class */ (function () {
             else {
                 //创建小球
                 c = new GreenC(this.linkMovePoint.g.spriteCircle.x + widthDic + 30, this.linkMovePoint.g.spriteCircle.y, 30);
-                this.view.addChild(c.spriteCircle);
+                // this.view.addChild(c.spriteCircle);
                 this.arr_GreenColider.push(c);
                 //创建节点
                 p = new GreenPoint(c);
@@ -154,7 +154,7 @@ var LinkManager = /** @class */ (function () {
     LinkManager.prototype.newGreenC = function (x, y) {
         var greenC = new GreenC(x, y, 30);
         // greenC.spriteCircle.visible = false;
-        this.view.addChild(greenC.spriteCircle);
+        // this.view.addChild(greenC.spriteCircle);
         return greenC;
     };
     /**融合 */

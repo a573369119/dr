@@ -68,7 +68,7 @@ class MouseTest extends Circle{
 
 
     /**绘制 */
-    public drwaC(x,y) : void
+    public drwaC(x,y,view) : void
     {
         this.spriteCircle.graphics.drawCircle(x,y,this.r,this.color,this.color,2);
     }

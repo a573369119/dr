@@ -3,7 +3,7 @@ class GreenC extends Circle{
 
 
     constructor(x,y,r,color?,full?){
-        super(x,y,r,"#0f0","#0f0");
+        super(x,y,r,"#0f0","#0f0",true);
     }
     
 }

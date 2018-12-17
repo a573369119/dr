@@ -44,7 +44,7 @@ class LinkManager {
             {
                 //创建小球
                 c = new GreenC(this.linkMovePoint.g.spriteCircle.x + widthDic + 30,this.linkMovePoint.g.spriteCircle.y,30);
-                this.view.addChild(c.spriteCircle);
+                // this.view.addChild(c.spriteCircle);
                 this.arr_GreenColider.push(c);
                 //创建节点
                 p = new GreenPoint(c);
@@ -200,7 +200,7 @@ class LinkManager {
     {
         let greenC = new GreenC(x,y,30);
         // greenC.spriteCircle.visible = false;
-        this.view.addChild(greenC.spriteCircle);
+        // this.view.addChild(greenC.spriteCircle);
         return greenC;
     }
 
