@@ -70,7 +70,11 @@ class MouseTest extends Circle{
     /**绘制 */
     public drwaC(x,y,view) : void
     {
-        this.spriteCircle.graphics.drawCircle(x,y,this.r,this.color,this.color,2);
+        let img = new Laya.Image("assets/suca2.png");
+        img.pivot(img.width/2,img.height/2);
+        img.x = x;
+        img.y = y;
+        this.spriteCircle.addChild(img);
     }
 
 

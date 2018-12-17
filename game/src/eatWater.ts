@@ -23,12 +23,12 @@ class eatWater{
     /**吸水 */
     private getWater() : void
     {
-
         this.arr_water.forEach(water => {
             if(Tool.ins.countDic_2(this.eatUI.x,this.eatUI.y,water.spriteCircle.x,water.spriteCircle.y) < 20)
             {
                this.biger(water);
-               this.caller.call(this.call);
+                console.log("吃水");
+               //this.caller.call(this.call);
             }
         });
     }

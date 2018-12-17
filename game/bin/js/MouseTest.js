@@ -55,7 +55,11 @@ var MouseTest = /** @class */ (function (_super) {
     };
     /**绘制 */
     MouseTest.prototype.drwaC = function (x, y, view) {
-        this.spriteCircle.graphics.drawCircle(x, y, this.r, this.color, this.color, 2);
+        var img = new Laya.Image("assets/suca2.png");
+        img.pivot(img.width / 2, img.height / 2);
+        img.x = x;
+        img.y = y;
+        this.spriteCircle.addChild(img);
     };
     // /**调用鼠标检测 */
     // public testMouse() : any

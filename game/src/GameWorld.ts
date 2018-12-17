@@ -26,6 +26,8 @@ class GameWorld{
     private waterCount : number = 120;
     /**土数量 */
     private tuCount : number = 50;
+    /**水 */
+    private getWaters : number ;
 
     /**位置数组 */
     private arr_PosTu : Array<any>; 
@@ -45,6 +47,11 @@ class GameWorld{
     private isControl : boolean;
     private rem_Mouse : number;
     private isRemMouseChange : boolean;
+    /**原先xy */
+    private xX : number;
+    private yY : number;
+    /**rotat */
+    private rote : number;
 
     constructor(){
         this.init()
@@ -52,9 +59,13 @@ class GameWorld{
     /**初始化 */
     private init() 
     {
+        this.rote = 0;
         this.greenCSize = 30;
         this.rem_Mouse = 0;
         this.isRemMouseChange = false;
+        this.getWaters = 0;
+        this.xX = 0;
+        this.yY = 0;
         /**初始化数组 */
         this.arr_PosTu = new Array<any>();
         this.arr_greenC = new Array<GreenC>();
@@ -127,7 +138,7 @@ class GameWorld{
     /**水珠减少*/
     private showWaterCount() : void
     {
-        this.gameUI.labWaterCount.text = --this.waterCount + "";
+        this.gameUI.labWaterCount.text = ++this.getWaters + "";
     }
 //-------------------------------------------------------------------关于鼠标
     /**private */
@@ -150,7 +161,7 @@ class GameWorld{
             //生成区域
             if(isColiderTu)
             {
-                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 20) 
+                if (Math.sqrt(Math.pow(this.mouseTest.mousePos_remX - mX, 2) + Math.pow(this.mouseTest.mousePos_remY - mY, 2)) > 30) 
                 {
                     //是否记入点
                     if(this.isControl)
@@ -161,9 +172,9 @@ class GameWorld{
                             mousePos.x = mX;
                             mousePos.y = mY;
                             this.mousePos.push(mousePos);//记录坐标点
+                            this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY,this.gameUI.sprite_go);
                         }
-
-                            this.mouseTest.drwaC(Laya.stage.mouseX, Laya.stage.mouseY,this.gameUI);
+                            
                             
                             this.mouseTest.mousePos = 0;
                             this.mouseTest.mousePos_remX = mX;
@@ -188,7 +199,7 @@ class GameWorld{
             }
             if(X < 35)
             {
-                console.log(Math.floor(this.rem_Mouse) + "now::" + Math.floor(X)  + "  差值::" + Math.floor(this. rem_Mouse - X) + " isRemChang:" + this.isRemMouseChange);
+                // console.log(Math.floor(this.rem_Mouse) + "now::" + Math.floor(X)  + "  差值::" + Math.floor(this. rem_Mouse - X) + " isRemChang:" + this.isRemMouseChange);
                 if(this.rem_Mouse - X > 0)
                 {
                     if(this.isRemMouseChange == true)
@@ -209,22 +220,143 @@ class GameWorld{
                 this.rem_Mouse = 0;
                 this.isRemMouseChange = false;
             }
-            this.gameUI.player.x = mX + this.msX;
-            this.gameUI.player.y = mY + this.msY;
-            
+            // this.gameUI.player.x = mX + this.gameUI.player.scaleX *this.msX;
+            // this.gameUI.player.y = mY + this.gameUI.player.scaleY *this.msY;
+            this.gameUI.player.x = Laya.stage.mouseX;
+            this.gameUI.player.y = Laya.stage.mouseY;
+            this.playerTo(mX,mY);           
         }
         ////////////////刺检测 从做到右
-        if(this.gameUI.player.x>this.gameUI.ci25.x && this.gameUI.player.y >this.gameUI.ci25.y && this.gameUI.player.y<this.gameUI.ci29.y)
+        let isGameOver = false;
+        if(this.gameUI.c1.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
         {
+            isGameOver = true;
+        }
+        if(this.gameUI.c2.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        {
+            isGameOver = true;
+        }
+        if(this.gameUI.c3.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        {
+            isGameOver = true;
+        }
+        if(this.gameUI.c4.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        { 
+            isGameOver = true;
+        }
+        if(this.gameUI.c5.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        {
+            isGameOver = true;
+        }
+        if(this.gameUI.c6.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        {
+            isGameOver = true;
+        }
+        if(this.gameUI.c7.hitTestPoint(this.gameUI.player.x,this.gameUI.player.y))
+        {
+            isGameOver = true;
+        }
 
+        if(isGameOver)
+        {
+            console.log("游戏结束");
+        }
+
+        ////////玩家的朝向
+    }
+
+    /**玩家的朝向 */
+    private playerTo(x,y) : void
+    {
+        if((this.xX == 0 && this.yY==0)||(this.xX == x&&this.yY == y))
+        {
+            this.xX = x;
+            this.yY = y;
+        }
+        else
+        {
+            if(Math.abs(this.rote -  this.rotation(this.xX,this.yY,x,y,"cos")) >0.05)
+            {
+                this.rote = (this.rotation(this.xX,this.yY,x,y,"cos"));
+                if(this.rotation(this.xX,this.yY,x,y,"sin") > 0 && (this.rotation(this.xX,this.yY,x,y,"cos") <= 0.3) && (this.rotation(this.xX,this.yY,x,y,"cos") >= -0.3))
+                {
+                    // console.log("下");
+                    this.gameUI.player.scaleX = 1;  
+                    this.gameUI.player.rotation = 0;
+                    this.gameUI.player.rotation = 90;
+                }
+                else if(this.rotation(this.xX,this.yY,x,y,"sin") <= 0 && (this.rotation(this.xX,this.yY,x,y,"cos") <= 0.3) && (this.rotation(this.xX,this.yY,x,y,"cos") >= -0.3))
+                {
+                    // console.log("上");
+                    this.gameUI.player.scaleX = 1;  
+                    this.gameUI.player.rotation = 0;
+                    this.gameUI.player.rotation = -90;                
+                }
+                else if(this.rotation(this.xX,this.yY,x,y,"cos") >= -1 && this.rotation(this.xX,this.yY,x,y,"cos") < -0.3 )
+                {
+                    // console.log("左");
+                    this.gameUI.player.scaleX = -1;
+                    this.gameUI.player.rotation = 0;                
+
+                }
+                else if(this.rotation(this.xX,this.yY,x,y,"cos") > 0.3 && this.rotation(this.xX,this.yY,x,y,"cos") <= 1  )
+                {
+                    // console.log("右");
+                    this.gameUI.player.scaleX = 1;      
+                    this.gameUI.player.rotation = 0;                                        
+                }
+                this.xX = 0;
+                this.yY = 0;
+                // console.log("cos" + this.rotation(this.xX,this.yY,x,y,"cos") + "   sin::" + this.rotation(this.xX,this.yY,x,y,"sin"));
+            }
+        }
+        
+    }
+
+  /**角度处理函数
+     * 
+     *  传入 碰撞物体
+     * 
+     *  获取正选 或余弦  或正切
+     * 
+     *  返回 对应值
+     * 
+     *  sin  对边/斜边
+     *  cos  临边/斜边
+     *  tan  对边/临边
+     * */
+    private rotation(x,y,mx,my,getString) : number
+    {
+        /**斜边 */
+        let c : number = Math.sqrt(Math.pow(x - mx,2) + Math.pow(y - my,2));
+        /**临边 */
+        let a : number = mx - x;
+        /**对边 */
+        let b : number = my - y;
+
+        if(getString == "sin")
+        {
+            //console.log("#sin ==" + (b/c));
+            return (b/c);
+        }
+        else if(getString == "cos")
+        {
+            //console.log("#cos ==" + (a/c));
+            return (a/c);
+        }
+        else
+        {
+            //console.log("#tan ==" + (b/a));//对边 比 临边 
+            return (b/a);
         }
     }
+
     /**判断是否是重合点 */
     private canKeepInMousePos(mX,mY) : boolean
     {
         for (let h = 0; h < this.mousePos.length; h++)  
         {
-            if (Tool.ins.countDic_2(this.mousePos[h].x, this.mousePos[h].y, mX, mY) < 40)  
+            if (Tool.ins.countDic_2(this.mousePos[h].x, this.mousePos[h].y, mX, mY) < 25)  
             {
                 // console.log("不做记录");
                 return false;
@@ -763,7 +895,7 @@ class GameWorld{
                  }
                 if(water.spriteCircle.x > 429&&water.spriteCircle.y>753&&water.spriteCircle.y<883&& this.arr_BtnWind[2] == true)
                 {
-                    water.setWindForce("w"+3,-1000,-10);   
+                    water.setWindForce("w"+3,-500,-10);   
                 }
                 else
                 {
@@ -771,7 +903,7 @@ class GameWorld{
                 }
                 if(water.spriteCircle.x > 264&&water.spriteCircle.y>496&&water.spriteCircle.y<580&& water.spriteCircle.x < 511 && this.arr_BtnWind[2] == true)
                 {
-                    water.setWindForce("w"+4,50,0);   
+                    water.setWindForce("w"+4,100,0);   
                 }
                 else
                 {
@@ -801,6 +933,13 @@ class GameWorld{
                     
                 }
             }
+            ///水落入
+                if(this.gameUI.gameWin.hitTestPoint(water.spriteCircle.x,water.spriteCircle.y))
+                {
+                    water.distroyWater();
+                    this.showWaterCount();
+                    console.log("成功进水");
+                }
         });
     }
 
@@ -811,7 +950,6 @@ class GameWorld{
         {
             if(Tool.ins.countDic_2(gC.spriteCircle.x,gC.spriteCircle.y,this.mousePos[i].x,this.mousePos[i].y) < 35)
             {
-                // gC.spriteCircle.visible = false;
                 return true;
             }
         }

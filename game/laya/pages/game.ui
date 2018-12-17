@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":118,
-    "selecteID":122,
+    "selectedBox":1,
+    "selecteID":236,
     "props":{"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
     "label":"View",
@@ -573,7 +573,7 @@
         {
             "x":15,
             "type":"Label",
-            "props":{"y":64,"x":487,"width":56,"var":"labWaterCount","text":"120","height":35,"fontSize":30,"font":"Microsoft YaHei","color":"#000000","bold":true,"align":"center"},
+            "props":{"y":64,"x":487,"width":56,"var":"labWaterCount","text":"0","height":35,"fontSize":30,"font":"Microsoft YaHei","color":"#000000","bold":true,"align":"center"},
             "nodeParent":1,
             "label":"Label(labWaterCount)",
             "isOpen":true,
@@ -745,19 +745,6 @@
                     "child":[
                         ]
                 }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "props":{"y":244,"x":368,"width":109,"var":"player","skin":"assets/role.png","pivotY":19,"pivotX":67,"height":49},
-            "nodeParent":1,
-            "label":"Image(player)",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":4,
-            "child":[
-                ]
         },
         {
             "x":15,
@@ -1329,6 +1316,44 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":234,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "props":{"y":941,"x":412,"width":49,"var":"gameWin","height":95},
+            "nodeParent":1,
+            "label":"Sprite(gameWin)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":235,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "props":{"y":247,"x":469,"width":96,"var":"player","rotation":0,"pivotY":28,"pivotX":77,"height":52},
+            "nodeParent":1,
+            "label":"Sprite(player)",
+            "isOpen":false,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":236,
+            "child":[
+                {
+                    "type":"Image",
+                    "props":{"y":32,"x":72,"width":109,"skin":"assets/role.png","pivotY":25,"pivotX":79,"height":49},
+                    "nodeParent":236,
+                    "label":"Image",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":4,
                     "child":[
                         ]
                 }]

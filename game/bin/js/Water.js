@@ -254,6 +254,7 @@ var Water = /** @class */ (function (_super) {
     /**水消失 */
     Water.prototype.distroyWater = function () {
         this.spriteCircle.visible = false;
+        this.spriteCircle.x = 1000;
     };
     return Water;
 }(Circle));

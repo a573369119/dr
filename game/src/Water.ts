@@ -343,5 +343,6 @@ class Water extends Circle{
     public distroyWater() : void
     {
         this.spriteCircle.visible = false;
+        this.spriteCircle.x = 1000;
     }
 }

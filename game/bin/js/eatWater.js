@@ -8,7 +8,7 @@ var eatWater = /** @class */ (function () {
         this.sca = 1;
         this.call = call;
         this.caller = caller;
-        Laya.timer.loop(800, this, this.getWater);
+        Laya.timer.loop(1000, this, this.getWater);
     }
     /**吸水 */
     eatWater.prototype.getWater = function () {
@@ -16,7 +16,8 @@ var eatWater = /** @class */ (function () {
         this.arr_water.forEach(function (water) {
             if (Tool.ins.countDic_2(_this.eatUI.x, _this.eatUI.y, water.spriteCircle.x, water.spriteCircle.y) < 20) {
                 _this.biger(water);
-                _this.caller.call(_this.call);
+                console.log("吃水");
+                //this.caller.call(this.call);
             }
         });
     };
